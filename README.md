@@ -98,7 +98,19 @@ Apply the changes
 
 #### Task-5: Look on EKS Cluster resources**
 
-Install kubectl: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+Download kubectl
+
+`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl`
+
+Setting permission and env
+
+`chmod +x ./kubectl`
+`mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH`
+`echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc`
+
+Verify installation
+
+`kubectl version --client`
 
 Update kubectl config
 
