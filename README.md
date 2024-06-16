@@ -69,7 +69,7 @@ module "eks_managed_node_group" {
 ```
 Reference: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
 
-#### Task-3: Add an Application Load Balancer**
+#### Task-3: Add an Application Load Balancer
 
 Complete the ALB Configuration on Terraform Manifest
 
@@ -82,7 +82,7 @@ module "alb" {
 Reference: https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/latest
 
 
-#### Task-4: Create EKS Cluster and related resources**
+#### Task-4: Create EKS Cluster and related resources
 
 Validate the Terraform template
 
@@ -96,7 +96,7 @@ Apply the changes
 
 `terraform apply`
 
-#### Task-5: Look on EKS Cluster resources**
+#### Task-5: Look on EKS Cluster resources
 
 Download kubectl
 
@@ -121,13 +121,13 @@ See PODS and Namespaces
 
 ### Lab-2: Implementare i tuoi Microservizi
 
-**Task-1: Creare la tua prima immagine Docker**
+#### Task-1: Creare la tua prima immagine Docker
 
 Retrieve an authentication token and authenticate your Docker client to your registry.
 
 `aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 983441761380.dkr.ecr.eu-west-1.amazonaws.com`
 
-### Bikes Microservices
+##### Bikes Microservices
 Locate Bikes Microservice
 
 Build your Docker image using the following command.
@@ -142,7 +142,7 @@ Run the following command to push this image to your newly created AWS repositor
 
 `docker push 983441761380.dkr.ecr.eu-west-1.amazonaws.com/<your-name>-bikes-ecr-repository:latest` 
 
-### Cars Microservices
+##### Cars Microservices
 Locate Cars Microservice
 
 Build your Docker image using the following command.
@@ -157,7 +157,7 @@ Run the following command to push this image to your newly created AWS repositor
 
 `docker push 983441761380.dkr.ecr.eu-west-1.amazonaws.com/<your-name>-cars-ecr-repository:latest` 
 
-**Task-2: Distribuire il tuo primo POD sul Cluster EKS**
+#### Task-2: Distribuire il tuo primo POD sul Cluster EKS
 
 Locate the bikes-deployment.yaml and update with the correct image url
 
@@ -186,21 +186,21 @@ Deploy the cars microservice
 
 ### Lab-3: Implementare una Pipeline CI/CD
 
-**Task-1: Creare un progetto CodeBuild**
+#### Task-1: Creare un progetto CodeBuild
 - Configurare un progetto AWS CodeBuild per automatizzare la build dell'immagine Docker.
 
-**Task-2: Creare una CodePipeline**
+#### Task-2: Creare una CodePipeline
 - Configurare una pipeline AWS CodePipeline per automatizzare il processo di build e deploy.
 
-**Task-3: Distribuire Microservizi con Deployment Blue/Green**
+#### Task-3: Distribuire Microservizi con Deployment Blue/Green
 - Implementare una strategia di deploy Blue/Green per minimizzare i tempi di inattività.
 
 ### Lab-4: Implementare l'Osservabilità
 
-**Task-1: Aggiungere Logging e Metriche**
+#### Task-1: Aggiungere Logging e Metriche
 - Configurare il logging e le metriche per monitorare le prestazioni e il funzionamento delle applicazioni.
 
-**Task-2: Aggiungere il Tracing**
+#### Task-2: Aggiungere il Tracing
 - Implementare il tracing distribuito per tracciare le richieste attraverso i microservizi.
 
 ## Prerequisiti
