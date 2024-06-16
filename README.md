@@ -123,7 +123,7 @@ See PODS and Namespaces
 
 ### Lab-2: Implementare i tuoi Microservizi
 
-#### Task-1: Creare la tua prima immagine Docker
+#### Task-1: Creare la tua prima immagine Docker
 
 Retrieve an authentication token and authenticate your Docker client to your registry.
 
@@ -188,8 +188,6 @@ containers:
 Deploy the cars microservice
 
 `kubectl apply -f cars-deployment.yaml`
-
-
 
 
 ### Lab-3: Implementare una Pipeline CI/CD

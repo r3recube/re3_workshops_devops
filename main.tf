@@ -75,10 +75,12 @@ resource "aws_eks_cluster" "eks_cluster" {
 }
 resource "aws_ecr_repository" "bikes_ecr_repository" {
   name = "${var.owner}-bikes-ecr-repository"
+  force_delete = true
 }
 
 resource "aws_ecr_repository" "cars_ecr_repository" {
   name = "${var.owner}-cars-ecr-repository"
+  force_delete = true
 }
 
 resource "aws_eks_node_group" "eks_node_group" {
