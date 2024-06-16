@@ -96,7 +96,9 @@ Apply the changes
 
 `terraform apply`
 
-#### Task-5: Look on EKS Cluster resources
+Verify the created resources
+
+#### Task-5: Look on EKS Cluster resources
 
 Download kubectl
 
@@ -127,6 +129,8 @@ Retrieve an authentication token and authenticate your Docker client to your reg
 
 `aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 983441761380.dkr.ecr.eu-west-1.amazonaws.com`
 
+Now you can start to create the microservices
+
 ##### Bikes Microservices
 Locate Bikes Microservice
 
@@ -142,6 +146,8 @@ Run the following command to push this image to your newly created AWS repositor
 
 `docker push 983441761380.dkr.ecr.eu-west-1.amazonaws.com/<your-name>-bikes-ecr-repository:latest` 
 
+Your microservice is Up & Running
+
 ##### Cars Microservices
 Locate Cars Microservice
 
@@ -156,6 +162,8 @@ Tag your image so you can push the image to this repository:
 Run the following command to push this image to your newly created AWS repository:
 
 `docker push 983441761380.dkr.ecr.eu-west-1.amazonaws.com/<your-name>-cars-ecr-repository:latest` 
+
+Your microservice is Up & Running
 
 #### Task-2: Distribuire il tuo primo POD sul Cluster EKS
 
