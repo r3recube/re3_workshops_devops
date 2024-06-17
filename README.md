@@ -46,11 +46,15 @@ Verify Terraform installation
 #### Task-1: Initialize Terraform
 Clone the repository
 
-`git clone https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<username>`
+```
+git clone https://github.com/r3recube/re3_workshops_devops
+```
 
 Initialize Terraform
 
-`terraform init`
+```
+terraform init
+```
 
 on `terraform.tfvars` set the variable with the following:
 - owner = *your name, lowercase without space (ex. paololatella)*
@@ -58,15 +62,21 @@ on `terraform.tfvars` set the variable with the following:
 
 Validate the Terraform template
 
-`terraform validate`
+```
+terraform validate
+```
 
 Create an execution plan
 
-`terrafom plan`
+```
+terrafom plan
+```
 
 Apply the changes
 
-`terraform apply`
+```
+terraform apply
+```
 
 #### Task-2: Add Managed Node Group to EKS
 
@@ -84,11 +94,15 @@ Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/res
 
 Create an execution plan
 
-`terrafom plan`
+```
+terrafom plan
+```
 
 Apply the changes
 
-`terraform apply`
+```
+terraform apply
+```
 
 ### Lab - 2: Play with your EKS Cluster
 
@@ -100,21 +114,29 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
 Download kubectl
 
-`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl`
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+```
 
 Setting permission and env
 
-`chmod +x ./kubectl`
-`mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH`
-`echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc`
+```
+chmod +x ./kubectl
+mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+```
 
 Verify installation
 
-`kubectl version --client`
+```
+kubectl version --client
+```
 
 Update kubectl config
 
-`aws eks update-kubeconfig --region region-code --name <your-name>-my-eks-cluster`
+```
+aws eks update-kubeconfig --region region-code --name <your-name>-my-eks-cluster
+```
 
 #### Task-2: Install and Configure the eksctl
 
@@ -129,7 +151,9 @@ PLATFORM=$(uname -s)_$ARCH
 
 Download the eksctl cli
 
-`curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"`
+```
+curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+```
 
 Install the eksctl cli
 
@@ -149,7 +173,7 @@ eksctl create iamserviceaccount \
   --cluster=<yourname>-my-eks-cluster \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
-  --role-name AmazonEKSLoadBalancerControllerRole \
+  --role-name <your-name>AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve
 ```
@@ -158,13 +182,25 @@ Now you can proceed to install Load Balancer with HELM
 
 ##### Step 2: Install AWS Load Balancer Controller
 
+Install Helm 
+
+```
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
 Add the eks-charts Helm chart repository. AWS maintains this repository on GitHub.
 
-`helm repo add eks https://aws.github.io/eks-charts`
+```
+helm repo add eks https://aws.github.io/eks-charts
+```
 
 Update your local repo to make sure that you have the most recent charts.
 
-`helm repo update eks`
+```
+helm repo update eks
+```
 
 Install the AWS Load Balancer Controller.
 
@@ -180,21 +216,29 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 Verify that the controller is installed.
 
-`kubectl get deployment -n kube-system aws-load-balancer-controller`
+```
+kubectl get deployment -n kube-system aws-load-balancer-controller
+```
 
 #### Task-4: Create EKS Cluster and related resources
 
 Validate the Terraform template
 
-`terraform validate`
+```
+terraform validate
+```
 
 Create an execution plan
 
-`terrafom plan`
+```
+terrafom plan
+```
 
 Apply the changes
 
-`terraform apply`
+```
+terraform apply
+```
 
 Verify the created resources
 
