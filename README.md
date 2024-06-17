@@ -13,9 +13,15 @@ Questo workshop è progettato per fornire una comprensione pratica dell'utilizzo
 
 Il workshop è suddiviso in quattro laboratori principali:
 
-### Lab-1: Creare un Cluster EKS usando Terraform
+### Lab-0: Setup Environment
 
-#### Task-0: Setup
+#### Task-1: Configure the AWS CLI
+
+Disable AWS Managed Temporary Credentials on Cloud 9
+
+Execute `aws configure` and put AK and SK related to you Cloudformation stack
+
+#### Task-2: Install Terraform
 
 Install yum-config-manager to manage your repositories.
 
@@ -29,6 +35,11 @@ Install Terraform from the new repository
 
 `sudo yum -y install terraform`
 
+Verify Terraform installation
+
+### Lab-1: Creare un Cluster EKS usando Terraform
+
+#### Task-1: Complete the Manifest file
 Clone the repository
 
 `git clone https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<username>`
@@ -36,8 +47,6 @@ Clone the repository
 Initialize Terraform
 
 `terraform init`
-
-#### Task-1: Complete the Manifest file
 
 on `terraform.tfvars` set the variable with the following:
 - owner = your name, lowercase without space (ex. paololatella)
@@ -216,6 +225,3 @@ Prima di iniziare, controlla che le seguenti risorse cloud sono disponibili nel 
 - Registro Docker
 - VPC
 - Repository Codice e Infrastruttura 
-
-- 
-
