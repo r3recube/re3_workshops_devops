@@ -13,7 +13,7 @@ Questo workshop è progettato per fornire una comprensione pratica dell'utilizzo
 
 Il workshop è suddiviso in quattro laboratori principali:
 
-### Lab-0: Setup Environment
+### Prerequirements: Setup Your Environment
 
 #### Task-1: Configure the AWS CLI
 
@@ -21,7 +21,11 @@ Disable AWS Managed Temporary Credentials on Cloud 9
 
 Execute `aws configure` and put AK and SK related to you Cloudformation stack
 
-#### Task-2: Install Terraform
+
+
+### Lab - 1: Create your EKS Cluster with Terraform
+
+#### Task-0: Install Terraform
 
 Install yum-config-manager to manage your repositories.
 
@@ -37,9 +41,9 @@ Install Terraform from the new repository
 
 Verify Terraform installation
 
-### Lab-1: Creare un Cluster EKS usando Terraform
+`terraform -help`
 
-#### Task-1: Complete the Manifest file
+#### Task-1: Initialize Terraform
 Clone the repository
 
 `git clone https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<username>`
@@ -49,7 +53,7 @@ Initialize Terraform
 `terraform init`
 
 on `terraform.tfvars` set the variable with the following:
-- owner = your name, lowercase without space (ex. paololatella)
+- owner = *your name, lowercase without space (ex. paololatella)*
 - aws_region = "eu-west-1"
 
 Validate the Terraform template
@@ -71,25 +75,112 @@ Complete the Node Group Configuration on Terraform Manifest
 on file `main.tf`
 
 ```
-module "eks_managed_node_group" {
-  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+resource "aws_eks_node_group" "eks_node_group" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
   ...
 }
 ```
-Reference: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
+Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group
+
+Create an execution plan
+
+`terrafom plan`
+
+Apply the changes
+
+`terraform apply`
+
+### Lab - 2: Play with your EKS Cluster
+
+#### Task-1: Install and Configure the kubectl
+
+The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. You can use kubectl to deploy applications, inspect and manage cluster resources, and view logs.
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+Download kubectl
+
+`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl`
+
+Setting permission and env
+
+`chmod +x ./kubectl`
+`mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH`
+`echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc`
+
+Verify installation
+
+`kubectl version --client`
+
+Update kubectl config
+
+`aws eks update-kubeconfig --region region-code --name <your-name>-my-eks-cluster`
+
+#### Task-2: Install and Configure the eksctl
+
+eksctl is a simple CLI tool for creating and managing clusters on EKS - Amazon's managed Kubernetes service for EC2.
+
+Setting Architecture
+
+```
+ARCH=amd64
+PLATFORM=$(uname -s)_$ARCH
+```
+
+Download the eksctl cli
+
+`curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"`
+
+Install the eksctl cli
+
+```
+tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+sudo mv /tmp/eksctl /usr/local/bin
+```
 
 #### Task-3: Add an Application Load Balancer
 
-Complete the ALB Configuration on Terraform Manifest
+##### Step 1: Create IAM Role using eksctl
+
+Replace <your-name> with the name of your IAM account, <account-id> with your account ID, and then run the command.
 
 ```
-module "alb" {
-  source = "terraform-aws-modules/alb/aws"
-  ...
-}
+eksctl create iamserviceaccount \
+  --cluster=<yourname>-my-eks-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
 ```
-Reference: https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/latest
 
+Now you can proceed to install Load Balancer with HELM
+
+##### Step 2: Install AWS Load Balancer Controller
+
+Add the eks-charts Helm chart repository. AWS maintains this repository on GitHub.
+
+`helm repo add eks https://aws.github.io/eks-charts`
+
+Update your local repo to make sure that you have the most recent charts.
+
+`helm repo update eks`
+
+Install the AWS Load Balancer Controller.
+
+Replace <your-name> with the name of your IAM account, <account-id> with your account ID, and then run the command.
+
+```
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=<your-name>-my-eks-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller 
+```
+
+Verify that the controller is installed.
+
+`kubectl get deployment -n kube-system aws-load-balancer-controller`
 
 #### Task-4: Create EKS Cluster and related resources
 
@@ -109,23 +200,7 @@ Verify the created resources
 
 #### Task-5: Look on EKS Cluster resources
 
-Download kubectl
 
-`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl`
-
-Setting permission and env
-
-`chmod +x ./kubectl`
-`mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH`
-`echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc`
-
-Verify installation
-
-`kubectl version --client`
-
-Update kubectl config
-
-`aws eks update-kubeconfig --region region-code --name <your-name>-my-eks-cluster`
 
 See PODS and Namespaces
 

@@ -73,6 +73,17 @@ resource "aws_eks_cluster" "eks_cluster" {
     aws_iam_role_policy_attachment.eks_cluster_role_policy
   ]
 }
+
+data "tls_certificate" "eks_certificate" {
+  url = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks_oidc" {
+  url = data.tls_certificate.eks_certificate.url
+  client_id_list = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.eks_certificate.certificates[0].sha1_fingerprint]
+}
+
 resource "aws_ecr_repository" "bikes_ecr_repository" {
   name = "${var.owner}-bikes-ecr-repository"
   force_delete = true
